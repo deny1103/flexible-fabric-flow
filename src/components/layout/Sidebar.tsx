@@ -18,7 +18,6 @@ import {
   Shirt,
   CheckSquare,
   PaintBucket,
-  BoxPackage,
   ClipboardList,
   BarChart4,
   ListChecks
@@ -212,10 +211,23 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggle }) => {
       )}
     >
       <div className="flex items-center justify-between h-16 px-4 border-b border-sidebar-border">
-        {!collapsed && (
-          <h1 className="text-sidebar-foreground text-lg font-medium truncate">
-            Production App
-          </h1>
+        {!collapsed ? (
+          <div className="flex items-center space-x-2">
+            <img 
+              src="/lovable-uploads/ef5cfd7d-bc24-41fc-a408-796807c0e8ab.png" 
+              alt="Harmas Logo" 
+              className="h-8 w-auto"
+            />
+            <h1 className="text-sidebar-foreground text-lg font-medium truncate">
+              Harmas ERP
+            </h1>
+          </div>
+        ) : (
+          <img 
+            src="/lovable-uploads/ef5cfd7d-bc24-41fc-a408-796807c0e8ab.png" 
+            alt="Harmas Logo" 
+            className="h-8 w-auto mx-auto"
+          />
         )}
         <Button 
           variant="ghost" 
