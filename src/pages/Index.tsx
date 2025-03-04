@@ -4,7 +4,8 @@ import { Bell, Package, TrendingUp, Users, ShoppingCart, AlertCircle } from 'luc
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/Badge';
+import { Badge } from '@/components/ui/badge'; // Fix casing to lowercase
+import { cn } from '@/lib/utils'; // Import cn function
 import StatCard from '@/components/dashboard/StatCard';
 import PageTransition from '@/components/layout/PageTransition';
 
