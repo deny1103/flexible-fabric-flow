@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { 
   Home, 
   PackageOpen, 
-  LayoutDashboard, 
   Package, 
   DollarSign, 
   FileText, 
@@ -14,14 +13,22 @@ import {
   Users, 
   Settings,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  ScissorsSquare,
+  Shirt,
+  CheckSquare,
+  PaintBucket,
+  BoxPackage,
+  ClipboardList,
+  BarChart4,
+  ListChecks
 } from 'lucide-react';
 
 type SidebarItem = {
   name: string;
   path: string;
   icon: React.ComponentType<{ className?: string }>;
-  children?: { name: string; path: string }[];
+  children?: { name: string; path: string, children?: { name: string; path: string }[] }[];
 };
 
 const sidebarItems: SidebarItem[] = [
@@ -35,8 +42,27 @@ const sidebarItems: SidebarItem[] = [
     path: '/production', 
     icon: Package,
     children: [
-      { name: 'Perencanaan Produksi', path: '/production/planning' },
-      { name: 'Proses Produksi', path: '/production/process' },
+      { 
+        name: 'Perencanaan Produksi', 
+        path: '/production/planning',
+        children: [
+          { name: 'Bahan Baku & Aksesoris', path: '/production/planning/materials' },
+          { name: 'Perencanaan Cutting', path: '/production/planning/cutting' },
+          { name: 'Perencanaan Sewing', path: '/production/planning/sewing' },
+          { name: 'Perencanaan Finishing', path: '/production/planning/finishing' },
+        ]
+      },
+      { 
+        name: 'Proses Produksi', 
+        path: '/production/process',
+        children: [
+          { name: 'Cutting', path: '/production/process/cutting' },
+          { name: 'Sewing', path: '/production/process/sewing' },
+          { name: 'QC', path: '/production/process/qc' },
+          { name: 'Finishing', path: '/production/process/finishing' },
+          { name: 'Packaging & Pengiriman', path: '/production/process/packaging' },
+        ]
+      },
     ]
   },
   { 
@@ -54,8 +80,22 @@ const sidebarItems: SidebarItem[] = [
     path: '/finance', 
     icon: DollarSign,
     children: [
-      { name: 'Manajemen Pembayaran', path: '/finance/payments' },
-      { name: 'Laporan Keuangan', path: '/finance/reports' },
+      { 
+        name: 'Manajemen Pembayaran', 
+        path: '/finance/payment',
+        children: [
+          { name: 'RCA Admin', path: '/finance/payment/rca' },
+          { name: 'Potongan/Tambahan', path: '/finance/payment/adjustments' },
+        ]
+      },
+      { 
+        name: 'Laporan Keuangan', 
+        path: '/finance/reports',
+        children: [
+          { name: 'Laporan RCA', path: '/finance/reports/rca' },
+          { name: 'Laporan Pengeluaran', path: '/finance/reports/expenses' },
+        ]
+      },
     ]
   },
   { 
@@ -63,8 +103,25 @@ const sidebarItems: SidebarItem[] = [
     path: '/reports', 
     icon: FileText,
     children: [
-      { name: 'Laporan Produksi', path: '/reports/production' },
-      { name: 'Laporan Penjualan', path: '/reports/sales' },
+      { 
+        name: 'Laporan Produksi', 
+        path: '/reports/production',
+        children: [
+          { name: 'Laporan Cutting', path: '/reports/production/cutting' },
+          { name: 'Laporan Sewing', path: '/reports/production/sewing' },
+          { name: 'Laporan QC', path: '/reports/production/qc' },
+          { name: 'Laporan Finishing', path: '/reports/production/finishing' },
+          { name: 'Perbandingan Finish IN/OUT', path: '/reports/production/comparison' },
+        ]
+      },
+      { 
+        name: 'Laporan Penjualan', 
+        path: '/reports/sales',
+        children: [
+          { name: 'Data Penjualan', path: '/reports/sales/data' },
+          { name: 'Kinerja Produk', path: '/reports/sales/performance' },
+        ]
+      },
     ]
   },
   { 
@@ -72,7 +129,20 @@ const sidebarItems: SidebarItem[] = [
     path: '/data', 
     icon: Database,
     children: [
-      { name: 'Data Master', path: '/data/master' },
+      { 
+        name: 'Data Master', 
+        path: '/data/master',
+        children: [
+          { name: 'Bahan Baku', path: '/data/master/materials' },
+          { name: 'Produk', path: '/data/master/products' },
+          { name: 'Ukuran', path: '/data/master/sizes' },
+          { name: 'Tipe PO', path: '/data/master/potypes' },
+          { name: 'Tipe Penjahit', path: '/data/master/tailortypes' },
+          { name: 'Data Penjahit', path: '/data/master/tailors' },
+          { name: 'Tarif Jahit', path: '/data/master/tailorrates' },
+          { name: 'Data Karyawan', path: '/data/master/employees' },
+        ]
+      },
     ]
   },
   { 
@@ -80,7 +150,16 @@ const sidebarItems: SidebarItem[] = [
     path: '/admin', 
     icon: Users,
     children: [
-      { name: 'Pengaturan Hak Akses', path: '/admin/access' },
+      { 
+        name: 'Pengaturan Hak Akses', 
+        path: '/admin/access',
+        children: [
+          { name: 'Menu Creator', path: '/admin/access/menu' },
+          { name: 'Manajemen Divisi', path: '/admin/access/divisions' },
+          { name: 'Manajemen User', path: '/admin/access/users' },
+          { name: 'Audit Log', path: '/admin/access/logs' },
+        ]
+      },
     ]
   },
 ];
@@ -92,10 +171,19 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ onToggle }) => {
   const [collapsed, setCollapsed] = useState(false);
   const [openDropdowns, setOpenDropdowns] = useState<{ [key: string]: boolean }>({});
+  const [openSubDropdowns, setOpenSubDropdowns] = useState<{ [key: string]: boolean }>({});
   const location = useLocation();
 
   const toggleDropdown = (path: string) => {
     setOpenDropdowns(prev => ({
+      ...prev,
+      [path]: !prev[path]
+    }));
+  };
+
+  const toggleSubDropdown = (path: string, event: React.MouseEvent) => {
+    event.stopPropagation();
+    setOpenSubDropdowns(prev => ({
       ...prev,
       [path]: !prev[path]
     }));
@@ -167,18 +255,57 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggle }) => {
                 </button>
                 
                 {!collapsed && openDropdowns[item.path] && (
-                  <div className="pl-9 mt-1 space-y-1">
+                  <div className="pl-6 mt-1 space-y-1">
                     {item.children.map((child) => (
-                      <Link
-                        key={child.path}
-                        to={child.path}
-                        className={cn(
-                          "sidebar-item text-sm py-2",
-                          location.pathname === child.path && "active"
+                      <div key={child.path}>
+                        {child.children ? (
+                          <>
+                            <button
+                              onClick={(e) => toggleSubDropdown(child.path, e)}
+                              className={cn(
+                                "sidebar-item w-full flex justify-between pl-3 text-sm py-2",
+                                location.pathname.startsWith(child.path) && "active"
+                              )}
+                            >
+                              <span>{child.name}</span>
+                              <ChevronRight 
+                                size={14} 
+                                className={cn(
+                                  "transition-transform", 
+                                  openSubDropdowns[child.path] && "rotate-90"
+                                )} 
+                              />
+                            </button>
+                            
+                            {openSubDropdowns[child.path] && (
+                              <div className="pl-4 mt-1 space-y-1">
+                                {child.children.map((subChild) => (
+                                  <Link
+                                    key={subChild.path}
+                                    to={subChild.path}
+                                    className={cn(
+                                      "sidebar-item text-xs py-2 pl-4",
+                                      location.pathname === subChild.path && "active"
+                                    )}
+                                  >
+                                    {subChild.name}
+                                  </Link>
+                                ))}
+                              </div>
+                            )}
+                          </>
+                        ) : (
+                          <Link
+                            to={child.path}
+                            className={cn(
+                              "sidebar-item text-sm py-2 pl-3",
+                              location.pathname === child.path && "active"
+                            )}
+                          >
+                            {child.name}
+                          </Link>
                         )}
-                      >
-                        {child.name}
-                      </Link>
+                      </div>
                     ))}
                   </div>
                 )}
