@@ -15,6 +15,11 @@ import DataManagement from "./pages/DataManagement";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
+// Import nested routes
+import ProductionReports from "./pages/reports/ProductionReports";
+import SalesReports from "./pages/reports/SalesReports";
+import MasterData from "./pages/data/MasterData";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -30,8 +35,16 @@ const App = () => (
               <Route path="/production" element={<Production />} />
               <Route path="/inventory" element={<Inventory />} />
               <Route path="/finance" element={<Finance />} />
+              
+              {/* Reports section with nested routes */}
               <Route path="/reports" element={<Reports />} />
+              <Route path="/reports/production" element={<ProductionReports />} />
+              <Route path="/reports/sales" element={<SalesReports />} />
+              
+              {/* Data Management section with nested routes */}
               <Route path="/data" element={<DataManagement />} />
+              <Route path="/data/master" element={<MasterData />} />
+              
               <Route path="/admin" element={<Admin />} />
             </Route>
             <Route path="*" element={<NotFound />} />
