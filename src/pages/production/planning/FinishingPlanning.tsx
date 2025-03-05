@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   Card, 
@@ -32,7 +31,7 @@ import { PlusCircle, FileEdit, Trash2, Calendar, Search } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { toast } from '@/components/ui/use-toast';
 import PageTransition from '@/components/layout/PageTransition';
-import { PeriodSelector } from '@/components/reports/common/PeriodSelector';
+import PeriodSelector from '@/components/reports/common/PeriodSelector';
 
 const FinishingPlanning = () => {
   const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]);
@@ -42,7 +41,6 @@ const FinishingPlanning = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedItem, setSelectedItem] = useState(null);
 
-  // Example finishing plans data
   const [finishingPlans, setFinishingPlans] = useState([
     { 
       id: 1, 
@@ -79,7 +77,6 @@ const FinishingPlanning = () => {
     },
   ]);
 
-  // Form state
   const [formData, setFormData] = useState({
     poNumber: '',
     productName: '',
@@ -149,7 +146,6 @@ const FinishingPlanning = () => {
     e.preventDefault();
 
     if (editMode && selectedItem) {
-      // Update existing plan
       setFinishingPlans(finishingPlans.map(plan => 
         plan.id === selectedItem.id ? 
         { ...plan, ...formData } : 
@@ -160,7 +156,6 @@ const FinishingPlanning = () => {
         description: "Data perencanaan finishing berhasil diperbarui",
       });
     } else {
-      // Add new plan
       const newPlan = {
         id: finishingPlans.length ? Math.max(...finishingPlans.map(p => p.id)) + 1 : 1,
         ...formData
@@ -224,7 +219,6 @@ const FinishingPlanning = () => {
           </Button>
         </div>
 
-        {/* Main content */}
         <Card>
           <CardHeader>
             <CardTitle>Daftar Rencana Finishing</CardTitle>
@@ -302,7 +296,6 @@ const FinishingPlanning = () => {
           </CardContent>
         </Card>
 
-        {/* Detail Section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card>
             <CardHeader>
@@ -386,7 +379,6 @@ const FinishingPlanning = () => {
           </Card>
         </div>
 
-        {/* Add/Edit Dialog */}
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
