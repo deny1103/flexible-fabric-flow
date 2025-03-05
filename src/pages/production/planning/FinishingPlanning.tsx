@@ -31,7 +31,7 @@ import { PlusCircle, FileEdit, Trash2, Calendar, Search } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { toast } from '@/components/ui/use-toast';
 import PageTransition from '@/components/layout/PageTransition';
-import PeriodSelector from '@/components/reports/common/PeriodSelector';
+import ActivePeriodCard from '@/components/reports/common/ActivePeriodCard';
 
 const FinishingPlanning = () => {
   const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]);
@@ -193,31 +193,32 @@ const FinishingPlanning = () => {
           </p>
         </div>
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <div className="relative">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="text"
-                placeholder="Cari rencana finishing..."
-                className="pl-8 w-[250px]"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-            <PeriodSelector
-              startDate={startDate}
-              endDate={endDate}
-              onStartDateChange={setStartDate}
-              onEndDateChange={setEndDate}
-              onApplyFilter={handleApplyFilter}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div className="relative w-full md:w-auto">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Cari rencana finishing..."
+              className="pl-8 w-full md:w-[250px]"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          <Button onClick={handleAddNew}>
+          <Button onClick={handleAddNew} className="w-full md:w-auto">
             <PlusCircle className="mr-2 h-4 w-4" />
             Tambah Perencanaan
           </Button>
         </div>
+
+        <ActivePeriodCard
+          startDate={startDate}
+          endDate={endDate}
+          onStartDateChange={setStartDate}
+          onEndDateChange={setEndDate}
+          onApplyFilter={handleApplyFilter}
+          title="Periode Perencanaan"
+          description={`Jadwal finishing dari ${startDate} hingga ${endDate}`}
+        />
 
         <Card>
           <CardHeader>
